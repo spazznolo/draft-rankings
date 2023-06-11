@@ -1,5 +1,6 @@
 draft-rankings.Rproj
+data/draft_rankings.csv
 .DS_Store
 .Rproj.user
 .Rhistory
-data/
+
