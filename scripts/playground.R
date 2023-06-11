@@ -39,3 +39,46 @@ tabulate_apply <- function(){
 }
 
 
+split(draf)
+
+# fix dates
+draft_rankings %>%
+  distinct(ranking_date) %>%
+  pull(ranking_date) %>%
+  str_split(., '[.]')
+  mutate(ranking_date = gsub('[.]+[1-9]', '', ranking_date))
+
+library(lubridate)
+  
+draft_rankings %>%
+  mutate(ranking_date = str_split(ranking_date, '[.]')[[1]]) %>%
+  mutate(ranking_date = mdy(ranking_date))
+
+ranking_dictionary <-
+  draft_rankings %>%
+  distinct(ranking_date) %>%
+  mutate(ranking_id = 1:n())
+
+draft_rankings %>%
+  group_by(ranking_date) %>%
+  mutate(group_id = cur_group_id()) %>%
+  distinct(ranking_date, group_id)
+?complete
+
+
+
+
+data(d_dublinwest)
+head(d_dublinwest)
+top_item_freq <- rank_summaries(data=d_dublinwest, format_input="ordering", mean_rank=TRUE,
+                                pc=FALSE)$marginals["Rank_1",]
+d_dublinwest_compl <- make_complete(data=d_dublinwest, format_input="ordering",
+                                    probitems=top_item_freq)
+head(d_dublinwest_compl$completedata)
+
+
+
+sd <- 
+  draft_rankings %>%
+  count(ranking_date, sort = TRUE) %>%
+  summarize(quantile(n))

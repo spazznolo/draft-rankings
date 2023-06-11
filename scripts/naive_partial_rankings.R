@@ -17,7 +17,7 @@ select <- dplyr::select
 # Read and preprocess draft rankings data
 draft_rankings <- 
   read_csv('data/draft_rankings.csv') %>%  # Read draft rankings data from a CSV file
-  pivot_longer(7:74, names_to = 'ranking_date', values_to = 'rank') %>%  # Convert wide format to long format
+  pivot_longer(7:ncol(.), names_to = 'ranking_date', values_to = 'rank') %>%  # Convert wide format to long format
   drop_na() %>%  # Drop rows with missing values
   arrange(ranking_date, rank) %>%  # Sort the data by ranking date and rank
   filter(rank <= 100) %>%  # Keep only the top 100 ranks
@@ -42,7 +42,7 @@ part_ranking_matrix <-
   draft_rankings %>%  # Use the draft rankings data
   inner_join(skater_dictionary, by = 'Skater') %>%  # Join the draft rankings data with the skater dictionary
   pivot_wider(id_cols = ranking_date, names_from = rank, values_from = skater_id, values_fill = 0) %>%  # Convert the data to a wide format, with skater IDs as values
-  select(2:101) %>%  # Select only the columns representing the ranks (columns 2 to 101)
+  select(2:ncol(.)) %>%  # Select only the columns representing the ranks (columns 2 to 101)
   as.matrix()  # Convert the data to a matrix
 
 # Create the full ranking matrix
@@ -80,6 +80,6 @@ draft_probabilities <-
 # The resulting data frame 'draft_probabilities' contains the simulated probabilities for each skater's rank.
 
 
-write_csv(draft_probabilities, 'data/draft_probabilities.csv')
+#write_csv(draft_probabilities, 'data/draft_probabilities.csv')
 
 
