@@ -16,7 +16,7 @@ select <- dplyr::select
 
 # Read and preprocess draft rankings data
 draft_rankings <- 
-  read_csv('draft copy.csv') %>%  # Read draft rankings data from a CSV file
+  read_csv('draft_rankings.csv') %>%  # Read draft rankings data from a CSV file
   pivot_longer(7:74, names_to = 'ranking_date', values_to = 'rank') %>%  # Convert wide format to long format
   drop_na() %>%  # Drop rows with missing values
   arrange(ranking_date, rank) %>%  # Sort the data by ranking date and rank
