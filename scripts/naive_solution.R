@@ -16,7 +16,7 @@ select <- dplyr::select
 
 # Read and preprocess draft rankings data
 draft_rankings <- 
-  read_csv('draft_rankings.csv') %>%  # Read draft rankings data from a CSV file
+  read_csv('data/draft_rankings.csv') %>%  # Read draft rankings data from a CSV file
   pivot_longer(7:74, names_to = 'ranking_date', values_to = 'rank') %>%  # Convert wide format to long format
   drop_na() %>%  # Drop rows with missing values
   arrange(ranking_date, rank) %>%  # Sort the data by ranking date and rank
@@ -59,6 +59,9 @@ map_estimates <- unname(MAP$P_map)  # Extract the MAP estimates for the probabil
 
 ## Simulate rankings based on MLE estimates extracted above
 
+# Set seed for reproducibility
+set.seed(33)
+
 # Simulate draft rankings
 draft_simulations <- 
   replicate(100000, sample(1:187, 187, replace = FALSE, prob = map_estimates)) %>%  # Simulate 100,000 draft rankings based on the estimated probabilities
@@ -77,6 +80,6 @@ draft_probabilities <-
 # The resulting data frame 'draft_probabilities' contains the simulated probabilities for each skater's rank.
 
 
-write_csv(draft_probabilities, 'draft_probabilities.csv')
+write_csv(draft_probabilities, 'data/draft_probabilities.csv')
 
 
