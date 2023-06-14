@@ -103,7 +103,7 @@ array[] int luce_rng(int R, vector betas, real sigma){
    
      for(i in 1:R){
     if(i!=1){
-    probs = betas_remain(100,betas, win_integer[1:(i-1)],i,sigma);
+    probs = betas_remain(195,betas, win_integer[1:(i-1)],i,sigma);
     }else{
       probs = softmax(betas/sigma);
     }
@@ -124,11 +124,11 @@ array[] int luce_rng(int R, vector betas, real sigma){
 data {
   int<lower=1> N; //the number of observations
   int<lower=1> P;// number of participants
-  array[N,100]  int x;// player id matrix. first column is first, second got second etc
+  array[N,196]  int x;// player id matrix. first column is first, second got second etc
   array[N] int nps;// number of participants in the race (7-8 in this data set)
   int n_types;// number of race types -e.g heats, semis, finals )
   array[N] int type; // (ordered from most important to least - i.e finals =1, semis =2, heats =2)
-  array[100] int finals; // The integers of the athletes in the finals (you could supply any 8 athletes to simulate a race with those participants if desired)
+  array[195] int finals; // The integers of the athletes in the finals (you could supply any 8 athletes to simulate a race with those participants if desired)
 }
 
 // The parameters accepted by the model. Our model
@@ -166,12 +166,12 @@ target += sum(out);
   
  array[P] int posterior_latent_ranks;
 
- array[100] int replay_ranking;
+ array[195] int replay_ranking;
 
  
  posterior_latent_ranks = ranker(to_array_1d(beta2),P);
  
- replay_ranking = luce_rng(100,beta[finals],1);
+ replay_ranking = luce_rng(195,beta[finals],1);
   
 
   

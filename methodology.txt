@@ -1,0 +1,4 @@
+
+These probabilities were derived by applying Stokes' methodology on track running, with some modifications. Stokes built a Plackett-Luce model in stan which handled subset rankings.xxx
+
+This can be seen as a 

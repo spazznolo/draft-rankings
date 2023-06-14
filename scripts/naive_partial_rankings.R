@@ -9,14 +9,12 @@ select <- dplyr::select
 
 # Introduction:
 # The goal of this code is to simulate draft rankings and calculate probabilities for each skater's rank.
-# It takes draft rankings data, preprocesses it, creates a ranking matrix, performs simulations, and calculates probabilities.
+# It takes draft rankings data, pre-processes it, creates a ranking matrix, performs simulations, and calculates probabilities.
 
-
-## Process Data
 
 # Read and preprocess draft rankings data
 draft_rankings <- 
-  read_csv('data/draft_rankings.csv') %>%  # Read draft rankings data from a CSV file
+  read_csv('data/draft_rankings_2.csv') %>%  # Read draft rankings data from a CSV file
   pivot_longer(7:ncol(.), names_to = 'ranking_date', values_to = 'rank') %>%  # Convert wide format to long format
   drop_na() %>%  # Drop rows with missing values
   arrange(ranking_date, rank) %>%  # Sort the data by ranking date and rank
