@@ -1,5 +1,8 @@
 draft-rankings.Rproj
-data/
+data/draft*
+data/weighted*
+data/missing*
+data/naive*
 .DS_Store
 .Rproj.user
 .Rhistory

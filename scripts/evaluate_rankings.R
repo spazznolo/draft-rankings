@@ -31,6 +31,18 @@ probabilities_by_method <-
   ggplot() +
   geom_vline(xintercept = c(10, 20), alpha = 0.25, linetype = 'dashed') +
   geom_line(aes(rank, probability, col = method)) +
-  xlim(0, 30)
+  xlim(0, 64)
 
 ggarrange(rankings_over_time, probabilities_by_method, ncol=2, nrow=1, labels = player_example)
+
+
+player_example <- c('HONZEK, SAMUEL')
+bind_rows(weighted_frequentist_probabilities, naive_bayesian_probabilities, weighted_bayesian_probabilities) %>%
+  filter(Skater %in% player_example, rank < 64) %>%
+  group_by(Skater, method) %>%
+  mutate(probability = cumsum(probability)) %>%
+  ungroup() %>%
+  ggplot() +
+  geom_vline(xintercept = c(10, 20), alpha = 0.25, linetype = 'dashed') +
+  geom_line(aes(rank, probability, col = method)) +
+  xlim(0, 64)

@@ -1,4 +1,7 @@
 
+The probabilities are generated through a process which primarily involves the application of a rank-ordered logit model to professional draft rankings released throughout the year. The methodology is a simplified version of "Predicting the NHL Draft with Rank-Ordered Logit Models" (https://ecp.ep.liu.se/index.php/linhac/article/view/480), developed by xxx. There are three main components to the model. First, draft rankings are by nature partial
+
+
 These probabilities were derived by applying Stokes' methodology on track running, with some modifications. Stokes built a Plackett-Luce model in stan which handled subset rankings.xxx
 
 This can be seen as a 
