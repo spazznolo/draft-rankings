@@ -7,7 +7,6 @@ weights <-
   ranking_dictionary %>%
   mutate(days_to_draft = as.numeric(ymd('2023-06-28') - ranking_date)) %>%
   left_join(weights_for_pl, by = 'days_to_draft') %>%
-  mutate(weight = weight / max(weight)) %>%
   pull(weight)
 
 # Fit the Plackett-Luce model
