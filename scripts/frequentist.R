@@ -1,4 +1,6 @@
 
+## Load weights
+
 # Read weights data (based on days to draft) for Plackett-Luce model
 weights_for_pl <- read_csv('data/weights_for_pl.csv')
 
@@ -9,16 +11,22 @@ weights <-
   left_join(weights_for_pl, by = 'days_to_draft') %>%
   pull(weight)
 
+
+## Build Plackett-Luce model
+
 # Fit the Plackett-Luce model
-pl_model <- PlackettLuce(full_ranking_matrix, weights = weights, npseudo = 0.5, maxit = c(5000, 100))
+pl_model <- PlackettLuce(full_ranking_matrix, weights = weights, npseudo = 0.1, maxit = c(5000, 100))
 
 # Obtain maximum likelihood estimates from the Plackett-Luce model
 mle_estimates <- coef(pl_model, log = FALSE)
 
+
+## Derive draft probabilities
+
 # Simulate draft rankings
 draft_simulations <- 
-  replicate(100000, sample(1:skaters, skaters, replace = FALSE, prob = mle_estimates)) %>%  # Simulate 100,000 draft rankings based on the estimated probabilities
-  matrix(., nrow = skaters, ncol = 100000)  # Convert the simulated rankings to a matrix format
+  replicate(100000, sample(1:skaters, skaters, replace = FALSE, prob = mle_estimates)) %>%  # Simulate 100,000 drafts based on the estimated probabilities
+  matrix(., nrow = skaters, ncol = 100000)  # Convert the simulated drafts to a matrix format
 
 # Calculate probabilities for each rank for each skater
 list_of_probabilities <- map(1:skaters, ~rowSums(draft_simulations == .) / 100000)

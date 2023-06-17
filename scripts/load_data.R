@@ -20,7 +20,7 @@ select <- dplyr::select
 
 # Read and preprocess draft rankings data
 draft_rankings <- 
-  read_csv('data/draft_rankings_4.csv') %>%  # Read draft rankings data from a CSV file
+  read_csv('data/draft_rankings_6.csv') %>%  # Read draft rankings data from a CSV file
   pivot_longer(7:ncol(.), names_to = 'ranking_name', values_to = 'rank') %>%  # Convert wide format to long format
   drop_na() %>%  # Drop rows with missing values
   arrange(ranking_name, rank) %>%  # Sort the data by ranking date and rank
@@ -49,7 +49,7 @@ ranking_dictionary <-
   draft_rankings %>%
   count(ranking_name, name = 'ranking_size') %>%  # Count the number of skaters in each ranking
   mutate(
-    ranking_id = 1:n(),  # Assign a unique identifier to each ranking
+    ranking_id = 1:n(),
     ranking_date = sub("[.].*", "\\1", ranking_name),  # Extract the date from the ranking name
     ranking_date = mdy(ranking_date),  # Convert the date to the "month-day-year" format
     ranking_weight = case_when(  # Assign a weight based on the ranking date
@@ -91,5 +91,14 @@ full_ranking_matrix <-
     format_input="ordering", 
     probitems=top_skater_freq) %>%
   .$completedata
+
+
+# Get necessary variables for rank-ordered logit models
+skaters <- nrow(skater_dictionary)
+rankings <- nrow(ranking_dictionary)
+ranking_list_lengths <- rep(skaters, rankings)
+ranking_weights <- ranking_dictionary$ranking_weight
+unique_weights <- n_distinct(ranking_dictionary$ranking_weight)
+predicted_ranks <- 1:(skaters - 1)
 
 

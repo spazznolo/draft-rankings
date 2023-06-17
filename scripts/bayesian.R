@@ -1,13 +1,5 @@
 
-# Build Stan model
-
-# Get necessary variables for Stan model
-skaters <- nrow(skater_dictionary)
-rankings <- nrow(ranking_dictionary)
-ranking_list_lengths <- rep(skaters, rankings)
-ranking_weights <- ranking_dictionary$ranking_weight
-unique_weights <- n_distinct(ranking_dictionary$ranking_weight)
-predicted_ranks <- 1:(skaters - 1)
+## Build Stan model
 
 # Prepare the data for the Stan model
 stan_dt <- 
