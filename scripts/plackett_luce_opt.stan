@@ -103,7 +103,7 @@ array[] int luce_rng(int R, vector betas, real sigma){
    
      for(i in 1:R){
     if(i!=1){
-    probs = betas_remain(202,betas, win_integer[1:(i-1)],i,sigma);
+    probs = betas_remain(204,betas, win_integer[1:(i-1)],i,sigma);
     }else{
       probs = softmax(betas/sigma);
     }

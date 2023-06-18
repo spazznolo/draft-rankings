@@ -6,4 +6,5 @@ data/naive*
 .DS_Store
 .Rproj.user
 .Rhistory
+data/head*
 

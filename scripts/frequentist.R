@@ -23,13 +23,14 @@ mle_estimates <- coef(pl_model, log = FALSE)
 
 ## Derive draft probabilities
 
+n_simulations <- 500000
 # Simulate draft rankings
 draft_simulations <- 
-  replicate(100000, sample(1:skaters, skaters, replace = FALSE, prob = mle_estimates)) %>%  # Simulate 100,000 drafts based on the estimated probabilities
-  matrix(., nrow = skaters, ncol = 100000)  # Convert the simulated drafts to a matrix format
+  replicate(500000, sample(1:skaters, skaters, replace = FALSE, prob = mle_estimates)) %>%  # Simulate 100,000 drafts based on the estimated probabilities
+  matrix(., nrow = skaters, ncol = 500000)  # Convert the simulated drafts to a matrix format
 
 # Calculate probabilities for each rank for each skater
-list_of_probabilities <- map(1:skaters, ~rowSums(draft_simulations == .) / 100000)
+list_of_probabilities <- map(1:skaters, ~rowSums(draft_simulations == .) / 500000)
 
 # Create a data frame with draft probabilities
 weighted_frequentist_probabilities <-
