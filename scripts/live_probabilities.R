@@ -10,15 +10,15 @@ skaters_left <- length(live_skaters)
 live_mle_estimates <- mle_estimates[-prospects_taken]
 
 # Simulate draft rankings
-draft_simulations <- 
+live_draft_simulations <- 
   replicate(100000, sample(live_skaters, skaters_left, replace = FALSE, prob = live_mle_estimates)) %>%  # Simulate 100,000 drafts based on the estimated probabilities
   matrix(., nrow = skaters_left, ncol = 100000)  # Convert the simulated drafts to a matrix format
 
 # Calculate probabilities for each rank for each skater
-list_of_probabilities <- map(live_skaters, ~rowSums(draft_simulations == .) / 100000)
+list_of_probabilities <- map(live_skaters, ~rowSums(live_draft_simulations == .) / 100000)
 
 new_skater_dictionary <-
-  skater_dictionary%>%
+  skater_dictionary %>%
   filter(!(skater_id %in% prospects_taken)) %>%
   mutate(skater_id = paste0('V', 1:n()))
 
@@ -30,5 +30,17 @@ remaining_frequentist_probabilities <-
   select(1:10) %>%
   pivot_longer(everything(), names_to = 'skater_id', values_to = 'prob_next') %>%
   left_join(new_skater_dictionary, by = 'skater_id')
+
+paste0(
+  "Pick ", length(live_picks), ":", live_picks[length(live_picks)],
+  "Probability drafted this high:", probs)
+
+
+paste0(
+  "Prospect Probabilities for Pick ", length(live_picks)
+)
+
+
+
 
 
