@@ -1,21 +1,9 @@
 
-## Load weights
-
-# Read weights data (based on days to draft) for Plackett-Luce model
-weights_for_pl <- read_csv('data/weights_for_pl.csv')
-
-# Calculate weights based on ranking date
-weights <-
-  ranking_dictionary %>%
-  mutate(days_to_draft = as.numeric(ymd('2023-06-28') - ranking_date)) %>%
-  left_join(weights_for_pl, by = 'days_to_draft') %>%
-  pull(weight)
-
 
 ## Build Plackett-Luce model
 
 # Fit the Plackett-Luce model
-pl_model <- PlackettLuce(full_ranking_matrix, weights = weights, npseudo = 0.1, maxit = c(5000, 100))
+pl_model <- PlackettLuce(full_ranking_matrix, weights = final_weights, npseudo = 0.1, maxit = c(5000, 100))
 
 # Obtain maximum likelihood estimates from the Plackett-Luce model
 mle_estimates <- coef(pl_model, log = FALSE)

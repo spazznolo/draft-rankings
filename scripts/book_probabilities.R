@@ -9,7 +9,7 @@ sportsbook_ou <-
     rank = position - 0.5) %>%
   filter(date == '2023-06-22') %>%
   select(book, skater, rank, prediction = under_prob)
-  
+100/350
 cml_probabilities <-
   weighted_frequentist_probabilities %>%
   group_by(Skater) %>%

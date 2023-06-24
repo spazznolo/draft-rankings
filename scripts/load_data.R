@@ -20,10 +20,10 @@ select <- dplyr::select
 
 # Read and preprocess draft rankings data
 draft_rankings <- 
-  read_csv('data/draft.csv') %>%  # Read draft rankings data from a CSV file
+  read_csv('data/draft_2023.csv', skip = 1) %>%  # Read draft rankings data from a CSV file
   pivot_longer(7:ncol(.), names_to = 'ranking_name', values_to = 'rank') %>%  # Convert wide format to long format
   drop_na() %>%  # Drop rows with missing values
-  arrange(ranking_name, rank) %>%  # Sort the data by ranking date and rank
+  arrange(rank) %>%  # Sort the data by ranking date and rank
   filter(rank <= 100) %>%  # Keep only the top 100 ranks
   group_by(ranking_name) %>%  # Group the data by ranking date
   mutate(rank = 1:n()) %>%  # Create a rank column based on the row number within each group
@@ -47,7 +47,7 @@ skater_dictionary <-
 # Create a ranking dictionary
 ranking_dictionary <-
   draft_rankings %>%
-  count(ranking_name, name = 'ranking_size') %>%  # Count the number of skaters in each ranking
+  distinct(ranking_name) %>%  # Count the number of skaters in each ranking
   mutate(
     ranking_id = 1:n(),
     ranking_date = sub("[.].*", "\\1", ranking_name),  # Extract the date from the ranking name
