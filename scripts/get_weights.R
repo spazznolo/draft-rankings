@@ -1,5 +1,5 @@
 
-## Load weights
+## Create time weights
 
 # Read weights data (based on days to draft) for Plackett-Luce model
 time_weights_for_pl <- read_csv('data/weights_for_pl.csv')
@@ -11,6 +11,7 @@ time_weights <-
   left_join(time_weights_for_pl, by = 'days_to_draft') %>%
   pull(weight)
 
+# Read historical publication rankings
 publication_predictions <-
   map_dfr(2018:2022, ~read_csv(paste0('data/draft_', ., '.csv')) %>% mutate(draft_year = .x)) %>%
   clean_names() %>%
@@ -19,7 +20,8 @@ publication_predictions <-
   pivot_longer(3:ncol(.), names_to = 'publication', values_to = 'prediction') %>%
   filter(prediction <= 30)
 
-pick_weights <-
+# Load pick value chart from Shuckers
+pick_values <-
   read_table('data/pick_value_chart.txt') %>%
   select(value_1 = 2, value_2 = 3) %>%
   mutate(
@@ -28,9 +30,10 @@ pick_weights <-
     weight = weight/sum(weight)) %>%
   select(prediction, weight)
 
+# Create model set to predict publication error for weights
 model_set <-
   publication_predictions %>%
-  left_join(pick_weights, by = 'prediction') %>%
+  left_join(pick_values, by = 'prediction') %>%
   mutate(error = abs(prediction - actual_pick)) %>%
   group_by(draft_year, publication) %>%
   summarize(metric = mean(error*weight)) %>%
@@ -46,8 +49,10 @@ model_set <-
   ungroup() %>%
   drop_na()
 
+# Train publication error outside year n on publication error in year n 
 lm_model <- lm(adj_metric ~ other_metric, model_set)
 
+# Assign publication weights
 publication_weights_for_pl <-
   model_set %>%
   group_by(publication) %>%
@@ -59,20 +64,25 @@ publication_weights_for_pl <-
     weight = n()*weight/sum(weight)) %>%
   select(publication, weight)
 
+# Save publication name for each rankings
 rankings_names <-
   read_csv('data/draft_2023.csv') %>%
   colnames() %>%
   gsub("\\..*","",.)
 
+# Create final weights using time weights and publication weights
 final_weights <-
   tibble(
-    publication = rankings_names
+    publication = tolower(gsub(' ', '', rankings_names))
+  ) %>%
+  mutate(
+    publication = ifelse(publication == 'mckeen', 'mckeens', publication)
   ) %>%
   filter(nchar(publication) > 1) %>%
   left_join(publication_weights_for_pl, by = 'publication') %>%
   add_count(publication) %>%
   mutate(
-    weight = replace_na(weight, 1), 
+    weight = replace_na(weight, 0.75), 
     time_weights = time_weights) %>%
   group_by(publication) %>%
   mutate(

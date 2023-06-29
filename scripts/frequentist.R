@@ -1,24 +1,38 @@
 
 
+
+
+reformat_simulations <- function(df_, skater_id_) {
+  
+  apply(df_, 1, function(x) which(x == skater_id_))
+  
+}
+
+reformated_ranking_matrix <- map_dfc(1:skaters, ~reformat_simulations(full_ranking_matrix, .))
+
+
 ## Build Plackett-Luce model
 
 # Fit the Plackett-Luce model
-pl_model <- PlackettLuce(full_ranking_matrix, weights = final_weights, npseudo = 0.1, maxit = c(5000, 100))
+pl_model <- PlackettLuce(reformated_ranking_matrix, weights = final_weights, npseudo = 0.05, maxit = c(5000, 100))
 
 # Obtain maximum likelihood estimates from the Plackett-Luce model
 mle_estimates <- coef(pl_model, log = FALSE)
+mle_estimates
 
-
+skater_dictionary$pre_draft_rank <- rank(-unname(mle_estimates))
 ## Derive draft probabilities
 
+# Simulation count
 n_simulations <- 500000
+
 # Simulate draft rankings
 draft_simulations <- 
-  replicate(500000, sample(1:skaters, skaters, replace = FALSE, prob = mle_estimates)) %>%  # Simulate 100,000 drafts based on the estimated probabilities
-  matrix(., nrow = skaters, ncol = 500000)  # Convert the simulated drafts to a matrix format
+  replicate(n_simulations, sample(1:skaters, skaters, replace = FALSE, prob = mle_estimates)) %>%  # Simulate 100,000 drafts based on the estimated probabilities
+  matrix(., nrow = skaters, ncol = n_simulations)  # Convert the simulated drafts to a matrix format
 
 # Calculate probabilities for each rank for each skater
-list_of_probabilities <- map(1:skaters, ~rowSums(draft_simulations == .) / 500000)
+list_of_probabilities <- map(1:skaters, ~rowSums(draft_simulations == .) / n_simulations)
 
 # Create a data frame with draft probabilities
 weighted_frequentist_probabilities <-
@@ -31,3 +45,4 @@ weighted_frequentist_probabilities <-
 
 # Write the draft probabilities to a CSV file
 write_csv(weighted_frequentist_probabilities, 'data/weighted_frequentist_probabilities.csv')
+

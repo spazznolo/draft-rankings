@@ -8,6 +8,10 @@ library(magrittr)
 library(janitor)  # For data cleaning and tabulation
 library(foreach)  # For iterating over elements
 library(PlackettLuce)
+library(wesanderson)
+library(ggridges)
+library(ggpubr)
+library(twitteR)
 
 select <- dplyr::select
 
@@ -79,17 +83,18 @@ top_skater_freq <-
   rank_summaries(
     data=ranking_matrix, 
     format_input="ordering", 
-    mean_rank=TRUE,
+    mean_rank=FALSE,
     pc=FALSE) %>%
   .$marginals %>%
   colSums()
+
 
 # Impute partial rankings to create full ranking matrix
 full_ranking_matrix <- 
   make_complete(
     data=ranking_matrix, 
     format_input="ordering", 
-    probitems=top_skater_freq) %>%
+    probitems=unname(top_skater_freq)) %>%
   .$completedata
 
 
