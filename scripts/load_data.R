@@ -11,7 +11,6 @@ library(PlackettLuce)
 library(wesanderson)
 library(ggridges)
 library(ggpubr)
-library(twitteR)
 
 select <- dplyr::select
 

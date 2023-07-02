@@ -35,7 +35,7 @@ ou <-
 
 ou %>%
   mutate(across(model:betano, ~ abs(. - outcome)^2)) %>%
-  filter(!is.na(model) & !is.na(bet365)) %>%
+  filter(rank > 10 & !is.na(model) & !is.na(bet365)) %>%
   summarize(across(model:betano, ~mean(.)))
 
 

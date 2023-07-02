@@ -9,3 +9,4 @@ data/naive*
 data/head*
 data/over*
 .httr-oauth
+*.txt

@@ -1,4 +1,5 @@
 
+source('~/Documents/projects/twitter_authentication.R')
 
 live_picks <- c('BEDARD, CONNOR', 'CARLSSON, LEO', 'FANTILLI, ADAM', 'SMITH, WILLIAM', 'REINBACHER, DAVID',
                 'SIMASHEV, DMITRIY', 'MICHKOV, MATVEI', 'LEONARD, RYAN', 'DANIELSON, NATE', 'DVORSKY, DALIBOR',
