@@ -1,0 +1,17 @@
+
+Instructions on the scripts-for-interview folder:
+
+I recommend you view the scripts in the order in which they are run, which is the following:
+    - libraries.R
+    - functions.R
+    - data.R
+    - get_weights.R
+    - frequentist.R
+    
+This gets us the prospect pick probability estimates we use for the analysis.
+
+These estimates feed into the following four scripts, the first two are for entertainment, the last two are for teams:
+  - head_to_head.R: 
+  - live_probabilities.R:
+  - derive_pick_values.R
+  - decision_making.R
