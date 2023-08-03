@@ -1,8 +1,8 @@
 
 # Load necessary libraries
-library(tidyverse)  # For data manipulation and visualization
+library(tidyverse)
 library(magrittr)
-library(janitor)  # For data cleaning and tabulation
+library(janitor)
 library(PlackettLuce)
 library(wesanderson)
 library(ggridges)
