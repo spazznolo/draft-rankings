@@ -1,12 +1,6 @@
 
 
-reformat_simulations <- function(df_, skater_id_) {
-  
-  apply(df_, 2, function(x) which(x == skater_id_))
-  
-}
-
-test <- map_dfc(1:skaters, ~reformat_simulations(draft_simulations, .))
+test <- map_dfc(1:skaters, ~reformat_simulations_2(draft_simulations, .))
 
 head_to_head <- 
   expand_grid(x = 1:skaters, y = 1:skaters) %>%

@@ -1,41 +1,6 @@
 
-library(gt)
-library(gtExtras)
 
-weighted_frequentist_probabilities <- read_csv('data/weighted_frequentist_probabilities.csv')
-
-canadiens_example <-
-  weighted_frequentist_probabilities %>%
-  filter(Skater %in% c('BEDARD, CONNOR', 'FANTILLI, ADAM', 'MICHKOV, MATVEI', 'CARLSSON, LEO', 'SMITH, WILLIAM'), 
-         rank <= 5) %>%
-  group_by(Skater) %>%
-  mutate(probability = cumsum(probability)) %>%
-  ungroup() %>%
-  mutate(probability = 1 - probability) %>%
-  mutate(pick = rank + 1) %>%
-  pivot_wider(id_cols = pick, names_from = Skater, values_from = probability) %>%
-  filter(pick < 6) %>%
-  add_row(pick = 1, 'BEDARD, CONNOR' = 1, 'FANTILLI, ADAM' = 1, 'MICHKOV, MATVEI' = 1, 
-          'CARLSSON, LEO' = 1, 'SMITH, WILLIAM' = 1) %>%
-  arrange(pick) %>%
-  gt() %>%
-  gt_theme_538() %>%
-  fmt_percent(columns = 2:6)
-
-# gtsave(canadiens_example, 
-#        "draft-probabilities-3-1.png", 
-#        path = '/Users/ada/Documents/projects/spazznolo.github.io/figs',
-#        expand = 0)
-
-(1.0000*24)
-(0.002*24) + (0.998*19)
-(0.000*24) + (0.114*19) + (0.886*17.5)
-(0.000*24) + (0.008*19) + (0.534*17.5) + (0.458*14.0)
-(0.000*24) + (0.000*19) + (0.151*17.5) + (0.177*14.0) + (0.672*12.0)
-
-(0.000*24) + (0.210*19) + (0.790*17.5)
-
-
+## Aesthetics
 
 # Function to create a dark theme for plots
 dark_theme <- function() {
@@ -57,5 +22,69 @@ dark_theme <- function() {
     legend.title = element_text(color = "white"),  # Customize legend title
     legend.text = element_text(color = "white")  # Customize legend text
   )
+  
+}
+
+# Define colors for consistency
+single_color = "#FFD500"  # Define a single color
+multiple_colors <- colorRampPalette(c('white', "#FFD500"))  # Define a color palette
+
+
+select <- dplyr::select
+
+reformat_ranking_matrix <- function(df_, skater_id_) {
+  
+  apply(df_, 1, function(x) which(x == skater_id_))
+  
+}
+
+reformat_simulations <- function(df_, skater_id_) {
+  
+  apply(df_, 2, function(x) which(x == skater_id_))
+  
+}
+
+
+
+get_remaining_probs <- function(x) {
+  
+  x_vec <- top_5_probs %>% pull(x)
+  
+  n = rep(0, length(x_vec))
+  
+  for (i in 1:length(x_vec)) {
+    
+    n[i] = x_vec[i]
+    
+    if (sum(n) >= 1) {
+      n[i] = 1 - sum(n[1:(i-1)])
+      return(n*10000) 
+    }
+  }
+  
+}
+
+get_remaining_probs <- function(x_vec) {
+  
+  n = rep(0, length(x_vec))
+  
+  for (i in 1:length(x_vec)) {
+    
+    n[i] = x_vec[i]
+    
+    if (sum(n) >= 1) {
+      n[i] = 1 - sum(n[1:(i-1)])
+      return(n) 
+    }
+  }
+  
+}
+
+tsx <- map(2:25, get_remaining_probs)
+
+apply_rnorm <- function(x, y, z) {
+  
+  if (x == 0) { return(vector()) }
+  if (x > 0) { return(rnorm(x, y, z)) }
   
 }

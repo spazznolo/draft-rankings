@@ -1,25 +1,3 @@
-# This code performs simulations and calculations related to draft rankings.
-
-# Load necessary libraries
-library(tidyverse)  # For data manipulation and visualization
-library(cmdstanr)  # For using CmdStan for simulations
-library(PLMIX)
-library(magrittr)
-library(janitor)  # For data cleaning and tabulation
-library(foreach)  # For iterating over elements
-library(PlackettLuce)
-library(wesanderson)
-library(ggridges)
-library(ggpubr)
-library(gt)
-library(gtExtras)
-
-select <- dplyr::select
-
-# Introduction:
-# The goal of this code is to simulate draft rankings and calculate probabilities for each skater's rank.
-# It takes draft rankings data, pre-processes it, creates a ranking matrix, performs simulations, and calculates probabilities.
-
 
 ## Load and format data
 
@@ -56,13 +34,7 @@ ranking_dictionary <-
   mutate(
     ranking_id = 1:n(),
     ranking_date = sub("[.].*", "\\1", ranking_name),  # Extract the date from the ranking name
-    ranking_date = mdy(ranking_date),  # Convert the date to the "month-day-year" format
-    ranking_weight = case_when(  # Assign a weight based on the ranking date
-      ranking_date < '2022-08-31' ~ 4,
-      ranking_date < '2023-01-05' ~ 3,
-      ranking_date < '2023-04-30' ~ 2,
-      TRUE ~ 1
-    )
+    ranking_date = mdy(ranking_date)  # Convert the date to the "month-day-year" format
   )
 
 # Create a partial ranking matrix
@@ -89,7 +61,6 @@ top_skater_freq <-
   .$marginals %>%
   colSums()
 
-
 # Impute partial rankings to create full ranking matrix
 full_ranking_matrix <- 
   make_complete(
@@ -98,13 +69,9 @@ full_ranking_matrix <-
     probitems=unname(top_skater_freq)) %>%
   .$completedata
 
-
 # Get necessary variables for rank-ordered logit models
 skaters <- nrow(skater_dictionary)
 rankings <- nrow(ranking_dictionary)
-ranking_list_lengths <- rep(skaters, rankings)
-ranking_weights <- ranking_dictionary$ranking_weight
-unique_weights <- n_distinct(ranking_dictionary$ranking_weight)
-predicted_ranks <- 1:(skaters - 1)
-
+#ranking_list_lengths <- rep(skaters, rankings)
+#predicted_ranks <- 1:(skaters - 1)
 

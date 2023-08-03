@@ -1,13 +1,4 @@
 
-# step 1: simulate up to wings first pick (assume pick 9)
-# step 2: remove 8 chosen prospects from analysis
-# step 3: sample pick from remaining prospects ranked from 9:20
-# step 4: save pick probabilities for pick 17
-# step 5: multiply probabilities in step 4 by sampled prospect value in step 3
-# step 6: save values
-# step 7: repeat steps 3:6 for each prospect ranked 9:20
-
-
 
 
 predicted_prospect_values <-
@@ -116,8 +107,6 @@ get_remaining_probs <- function(x) {
       }
   }
   
-  
-  
 }
 
 tsx <- map(2:25, get_remaining_probs)
@@ -170,7 +159,6 @@ ggsave(
 )
 
 
-new_pick_values %>% summarize_all(mean, na.rm = TRUE)
 pick_difference_4_5 <- sample(new_pick_values$pick_4, 10000) - sample(new_pick_values$pick_5, 10000)
 mean(pick_difference_4_5, na.rm = TRUE)
 mean(pick_difference_4_5 > 0, na.rm = TRUE)

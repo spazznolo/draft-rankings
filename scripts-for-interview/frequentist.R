@@ -1,23 +1,23 @@
 
-
-reformated_ranking_matrix <- map_dfc(1:skaters, ~reformat_simulations_1(full_ranking_matrix, .))
-
-
 ## Build Plackett-Luce model
 
+# Reformat ranking matrix for PlackettLuce function
+reformated_ranking_matrix <- map_dfc(1:skaters, ~reformat_ranking_matrix(full_ranking_matrix, .))
+
 # Fit the Plackett-Luce model
-pl_model <- PlackettLuce(reformated_ranking_matrix, weights = final_weights, npseudo = 0.05, maxit = c(5000, 100))
+pl_model <- PlackettLuce(reformated_ranking_matrix, weights = time_weights, npseudo = 0.05, maxit = c(5000, 100))
 
 # Obtain maximum likelihood estimates from the Plackett-Luce model
 mle_estimates <- coef(pl_model, log = FALSE)
 
+# Assign pre-draft prospect rankings based on mle estimates
 skater_dictionary$pre_draft_rank <- rank(-unname(mle_estimates))
 
 
 ## Derive draft probabilities
 
 # Simulation count
-n_simulations <- 100000
+n_simulations <- 5000
 
 # Simulate draft rankings
 draft_simulations <- 
@@ -36,6 +36,4 @@ weighted_frequentist_probabilities <-
   pivot_longer(2:(skaters + 1), names_to = 'rank', values_to = 'probability') %>%
   mutate(method = 'weighted_frequentist', rank = parse_number(rank))  # Rename the columns to represent the ranks
 
-# Write the draft probabilities to a CSV file
-write_csv(weighted_frequentist_probabilities, 'data/weighted_frequentist_probabilities.csv')
 
