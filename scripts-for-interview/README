@@ -15,3 +15,9 @@ These estimates feed into the following four scripts, the first two are for ente
   - live_probabilities.R: compute probability of prospects being selected with the next pick.
   - derive_pick_values.R: derive pick values from prospect values and pick probabilities.
   - decision_making.R: use pick values to create decision making framework.
+
+I've written about this work in four blog posts, which can be found here:
+  - https://spazznolo.github.io/2023/06/16/draft-probabilities-2.html
+  - https://spazznolo.github.io/2023/06/20/draft-probabilities-3.html
+  - https://spazznolo.github.io/2023/07/02/draft-probabilities-4.html
+  - https://spazznolo.github.io/2023/07/07/draft-probabilities-5.html
