@@ -30,16 +30,19 @@ single_color = "#FFD500"  # Define a single color
 multiple_colors <- colorRampPalette(c('white', "#FFD500"))  # Define a color palette
 
 
+## Functional
+
+# Create an alias for the 'select' function from the dplyr package
 select <- dplyr::select
 
+# Function to reformat the ranking matrix
 reformat_ranking_matrix <- function(df_, skater_id_) {
-  
+  # Apply a function row-wise to find the position of skater rankings' in each ranking list
   apply(df_, 1, function(x) which(x == skater_id_))
-  
 }
 
+# Function to reformat the simulations
 reformat_simulations <- function(df_, skater_id_) {
-  
+  # Apply a function column-wise to find the position of skaters in each simulation
   apply(df_, 2, function(x) which(x == skater_id_))
-  
 }
