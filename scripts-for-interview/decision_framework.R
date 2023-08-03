@@ -1,29 +1,14 @@
 
+# This script is messy and unfinished.
+
 # step 1: simulate up to wings first pick (assume pick 9)
 # step 2: remove 8 chosen prospects from analysis
-# step 3: sample pick from remaining prospects ranked from 9:20
+# step 3: sample prospect from remaining prospects ranked from 9:20
 # step 4: save pick probabilities for pick 17
 # step 5: multiply probabilities in step 4 by sampled prospect value in step 3
 # step 6: save values
 # step 7: repeat steps 3:6 for each prospect ranked 9:20
 
-
-
-get_remaining_probs <- function(x_vec) {
-  
-  n = rep(0, length(x_vec))
-  
-  for (i in 1:length(x_vec)) {
-    
-    n[i] = x_vec[i]
-    
-    if (sum(n) >= 1) {
-      n[i] = 1 - sum(n[1:(i-1)])
-      return(n) 
-    }
-  }
-  
-}
 
 gsva_value <- c(17.1, 12.3, 10.2, 9, 8.2, 7.6, 7.1, 6.7, 6.3, 6.0,
                    5.7, 5.5, 5.3, 5.1, 4.9, 4.7, 4.5, 4.3, 4.2, 4.0,

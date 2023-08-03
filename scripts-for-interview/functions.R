@@ -46,3 +46,20 @@ reformat_simulations <- function(df_, skater_id_) {
   # Apply a function column-wise to find the position of skaters in each simulation
   apply(df_, 2, function(x) which(x == skater_id_))
 }
+
+# Function to calculate remaining probabilities
+get_remaining_probs <- function(x_vec) {
+  
+  n = rep(0, length(x_vec))  # Initialize a vector 'n' with zeros of the same length as 'x_vec'
+  
+  for (i in 1:length(x_vec)) {  # Loop through each element of 'x_vec'
+    
+    n[i] = x_vec[i]  # Set the current element of 'n' to the corresponding element of 'x_vec'
+    
+    if (sum(n) >= 1) {  # Check if the sum of 'n' is greater than or equal to 1
+      n[i] = 1 - sum(n[1:(i-1)])  # If the condition is met, adjust the current element of 'n' to make the sum exactly 1
+      return(n)  # Return the modified 'n' vector
+    }
+  }
+  
+}

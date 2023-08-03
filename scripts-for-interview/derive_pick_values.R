@@ -1,33 +1,40 @@
 
-predicted_prospect_values <-
-  tibble(
-    bedard = rnorm(100000, 24, 3),
-    fantilli = rnorm(100000, 19, 4),
-    michkov = rnorm(100000, 17.5, 7),
-    carlsson = rnorm(100000, 14, 4.5),
-    smith = rnorm(100000, 12, 5))
+# Simulate predicted prospect values using normal distribution for each player
+predicted_prospect_values <- tibble(
+  bedard = rnorm(100000, 24, 3),
+  fantilli = rnorm(100000, 19, 4),
+  michkov = rnorm(100000, 17.5, 7),
+  carlsson = rnorm(100000, 14, 4.5),
+  smith = rnorm(100000, 12, 5)
+)
 
+# Reshape data to long format and replace negative values with 0
 predicted_prospect_values %>%
   pivot_longer(everything(), names_to = 'prospect', values_to = 'war') %>%
   mutate(war = ifelse(war < 0, 0, war)) %>%
+  # Create a density plot to visualize the distribution of predicted WAR for each prospect
   ggplot() +
   geom_density(aes(war, fill = prospect), alpha = 0.75) +
+  # Customize the color palette for prospects
   scale_fill_manual(values = c('lightblue', "#78B7C5", "#EBCC2A", "yellowgreen", "#F21A00")) +
+  # Apply a dark theme for aesthetics
   dark_theme() +
   theme(
-    panel.grid.major = element_line(color = 'black'),
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank()
+    panel.grid.major = element_line(color = 'black'),  # Customize major grid lines to be black
+    axis.text.y = element_blank(),  # Remove y-axis text labels
+    axis.ticks.y = element_blank()  # Remove y-axis ticks
   ) +
-  labs(x = '\n7-year predicted WAR') +
-  rremove("ylab")
+  labs(x = '\n7-year predicted WAR') +  # Customize x-axis label
+  rremove("ylab")  # Remove y-axis label
 
+# Assign prospect values using normal distribution with individual variance for each player
 predicted_prospect_values <-
   tibble(
     pre_draft_rank = 1:5,
     value_mean = c(24, 19, 17.5, 14, 12),
     value_sd = c(3, 4, 7, 4.5, 5))
 
+# Derive top 5 pick probabilities for each relevant prospect
 top_5_probs <-
   weighted_frequentist_probabilities %>%
   mutate(rank = rank + 1)%>%
@@ -49,6 +56,7 @@ top_5_probs <-
   mutate(picks = 10000*probability) %>%
   add_row(Skater = 'BEDARD, CONNOR', rank = 1, picks = 10000, value_mean = 24, value_sd = 3) 
 
+# Simulate top 5 pick values (by WAR) using prospect values and pick probabilities
 top_5_probs %>%
   rowwise() %>%
   mutate(sample = list(rnorm(picks, value_mean, value_sd))) %>%
@@ -62,7 +70,7 @@ top_5_probs %>%
     legend.position = 'none') +
   labs(x = '\n7-year predicted WAR', y = 'Pick\n')
 
-
+# Simulate predicted WAR values for picks 4 and 5
 compare_picks_4_5 <-
   top_5_probs %>%
   rowwise() %>%
@@ -78,6 +86,7 @@ compare_picks_4_5 <-
   clean_names() %>%
   mutate(diff = x4 - x5)
 
+# Create a density plot to compare predicted WAR differences for picks 4 and 5
 compare_picks_4_5 %>%
   ggplot() +
   geom_vline(xintercept = mean(compare_picks_4_5$diff, na.rm = TRUE), alpha = 0.5, col = 'white', linetype = 'dashed', lwd = 1) +
