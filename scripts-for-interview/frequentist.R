@@ -5,7 +5,7 @@
 reformated_ranking_matrix <- map_dfc(1:skaters, ~reformat_ranking_matrix(full_ranking_matrix, .))
 
 # Fit the Plackett-Luce model
-pl_model <- PlackettLuce(reformated_ranking_matrix, weights = time_weights, npseudo = 0.05, maxit = c(5000, 100))
+pl_model <- PlackettLuce(reformated_ranking_matrix, weights = time_weights, maxit = 1000)
 
 # Obtain maximum likelihood estimates from the Plackett-Luce model
 mle_estimates <- coef(pl_model, log = FALSE)

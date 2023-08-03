@@ -72,6 +72,3 @@ full_ranking_matrix <-
 # Get necessary variables for rank-ordered logit models
 skaters <- nrow(skater_dictionary)
 rankings <- nrow(ranking_dictionary)
-#ranking_list_lengths <- rep(skaters, rankings)
-#predicted_ranks <- 1:(skaters - 1)
-
