@@ -1,16 +1,31 @@
 
+The goal of this project was to derive prospect pick probabilities from expert rankings. These probabilities offer various use cases:
+	- get live probabilities after each pick (entertainment)
+	- compare prospect pick probabilities head to head (entertainment)
+	- derive pick values of given draft, instead of using historical averages (business)
+	- create decision-making framework (business)
+	
 Instructions on the scripts-for-interview folder:
 
 I recommend you view the scripts in the order in which they are run, which is the following:
     - libraries.R: load necessary libraries.
     - functions.R: load necessary functions.
     - data.R: load necessary data.
+      	- format ranking set
+	      - create skater dictionary
+	      - create ranking dictionary
+	      - reshape ranking set into partial rankings matrix
+	      - create full rankings via imputation, weighted by appearance counts
     - get_weights.R: load time weights.
+
+This gets us the input data for the Placket-Luce model.
+
+These data are then modelled in the following script:
     - frequentist.R: implement frequentist Plackett-Luce model.
     
-This gets us the prospect pick probability estimates we use for the analysis.
+This gets us the prospect pick probability estimates used for the analysis.
 
-These estimates feed into the following four scripts, the first two are for entertainment, the last two are for decision making:
+These estimates feed into the following four scripts:
   - head_to_head.R: compute probability a given prospect is picked ahead of another prospect.
   - live_probabilities.R: compute probability of prospects being selected with the next pick.
   - derive_pick_values.R: derive pick values from prospect values and pick probabilities.
