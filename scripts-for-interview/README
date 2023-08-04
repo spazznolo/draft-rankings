@@ -18,7 +18,7 @@ I recommend you view the scripts in the order in which they are run, which is th
 	      - create full rankings via imputation, weighted by appearance counts
     - get_weights.R: load time weights.
 
-This gets us the input data for the Placket-Luce model.
+This gets us the input data for the Plackett-Luce model.
 
 These data are then modelled in the following script:
     - frequentist.R: implement frequentist Plackett-Luce model.
@@ -36,3 +36,16 @@ I've written about this work in four blog posts, which can be found here:
   - https://spazznolo.github.io/2023/06/20/draft-probabilities-3.html
   - https://spazznolo.github.io/2023/07/02/draft-probabilities-4.html
   - https://spazznolo.github.io/2023/07/07/draft-probabilities-5.html
+
+How the model was evaluated:
+	- weighted brier score vs sportsbooks
+	- weighted mean ranking error vs publications
+	- calibration plot
+	
+Some assumptions:
+	- publication rankings are similar to team rankings (same incentives)
+	- only 210 prospects are available for the first 64 picks
+	- time is flat
+	
+	
+	

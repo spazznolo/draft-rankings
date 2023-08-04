@@ -14,3 +14,5 @@ time_weights <-
   mutate(days_to_draft = as.numeric(ymd('2023-06-28') - ranking_date)) %>%
   left_join(time_weights_for_pl, by = 'days_to_draft') %>%
   pull(weight)
+
+plot(ranking_dictionary$ranking_date, time_weights)
